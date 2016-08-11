@@ -1,0 +1,74 @@
+1.原型链继承
+2.借用构造函数继承(经典继承)
+3.组合继承(原型+构造)
+4.原型式继承
+5.寄生式继承
+6.寄生组合式继承
+----------------------
+1.原型链继承
+function A(){
+	this.property = true;
+}
+A.prototype.getA_Value = function(){
+	return this.property;
+}
+function B(){
+	this.Bproperty = false;
+}
+B.prototype = new A();
+B.prototype.getB_Value = function(){
+	return this.Bproperty;
+};
+var instance = new B();
+alert(instance.getA_Value());//true
+
+alert(instance instanceof Object);//true
+alert(instance instanceof A);//true
+alert(instance instanceof B);//true
+//查找属性：1.搜索实例；2.搜索B.prototype;3.搜索A.prototype;
+----------------------
+2.经典继承
+function SuperType(){
+	this.colors = ['red','blue','green'];
+}
+function SubType(){
+	SuperType.call(this);
+}
+
+var instance1 = new SubType();
+instance1.colors.push('black');
+alert(instance1.colors);//red,blue,green,black
+
+var instance2 = new SubType();
+alert(instance2.colors);//red,blue,green
+----------------------
+3.组合继承(伪经典继承)//javascript 最常用的继承模式
+//使用原型链实现对象原型属性和方法的继承，而通过借用构造函数来实现对实例属性的继承
+function SuperType(name) {
+	this.name = name;
+	this.colors = ['red','blue','green'];
+}
+SuperType.prototype.sayName = function(){
+	alert(this.name);
+};
+function SubType(name,age){
+	SuperType.call(this.name);//借用构造函数
+	this.age=age;
+}
+
+SubType.prototype = new SuperType();//借用原型链
+SubType.prototype.constructor = SubType;
+SubType.prototype.sayAge =function(){
+	alert(this.age);
+};
+
+var instance1 = new SubType("Nicholas",29);
+instance1.colors.push("black");
+alert(instance1.colors);//red,blue,green,black
+instance1.sayName();//Nicholas
+instance1.sayAge();//29
+
+var instance2 = new SubType("Greg",27);
+alert(instance2.colors);//red,blue,green
+instance2.sayName();//Greg
+instance2.sayAge();//27
