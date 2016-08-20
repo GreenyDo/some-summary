@@ -1,0 +1,91 @@
+表单基础知识：
+HTMLFormElement
+包含属性和方法：
+acceptCharset:服务器能够处理的字符集；等价于html中的accept-charset
+action:接收请求的URL;等价于html中的action
+elements：表单中所有控件的集合
+enctype：请求的编码类型；等价与HTML中的enctype
+length：表单中控件的数量
+method：要发送的HTTP请求类型，通常是"get"或"post";等价于html的method
+name：表单的名称；等价于html的name属性
+reset(): 将所有表单域重置为默认值
+submit():提交表单
+target：用于发送请求和接收响应的窗口名称；等价于html的target特性
+-------------------------------
+var form = document.getElementById("form1");
+
+document.forms//获取页面中所有的表单
+var firstForm = document.forms[0];//取得页面中的第一个表单
+var myForm = document.forms["form2"];//取得页面中名称为form2的表单
+-------------------------------
+
+提交表单
+<input type="submit"/>
+<button type="submit"></button>
+<input type="image" src="graphic.gif"/> //图像按钮
+
+阻止表单提交
+var form = document.getElementById("myForm");
+EventUtil.addHandler(form, "submit", function(event){
+	event = EventUtil.getEvent(event);//取得事件对象
+	EventUtil.preventDefault(event);//阻止默认事件
+});
+
+提交表单方法2：
+var form = document.getElementById("myForm");
+form.submit();//提交表单
+但是！！！，不会触发submit事件，因此要记得在调用此方法之前先验证表单数据
+----------------------------------
+解决重复提交表单：
+1.在第一次提交表单后就禁用提交按钮
+2.利用onsubmit事件处理程序取消后续的表单提交操作
+-------------------------------
+<input type="reset" />
+
+<button type="reset"></button>
+
+阻止表单重置：
+var form = document.getElementById("myForm");
+EventUtil.addHandler(form, "reset", function(event){
+	event = EventUtil.getEvent(event);//取得事件对象
+	EventUtil.preventDefault(event);
+});
+---------------------------------------
+表单字段
+使用原生DOM方法访问表单元素，每个表单都有elements属性，
+该属性是表单中所有表单元素(字段)的集合。
+是一个有序列表，其中包含着表单中的所有字段。
+每个表单字段在elements集合中的顺序，与它们出现在标记中的顺序相同
+var form = document.getElementById("form1");
+
+var field1 = form.elements[0];//取得表单中的第一个字段
+
+var field2 = form.elements["textbox1"];//取得名为“textbox1”的字段
+
+var fieldCount = form.elements.length;//取得表单中包含的字段的数量
+
+表单中若有多个 name="color", 访问elements["color"]时，就会返回NodeList，其中包含这3个元素；
+------------------------------------
+<fieldset> 元素可将表单内的相关元素分组。
+表单字段属性：
+disabled：布尔值，表示当前字段是否被禁用
+form：指向当前字段所属表单的指针
+name：当前字段的名称
+readOnly：布尔值，表示当前字段是否只读
+tabIndex：表示当前字段的切换序号
+type：当前字段的类型，如checkbox、radio等 
+value：当前字段将被提交给服务器的值
+
+var form = document.getElementById("myForm");
+var field = form.elements[0];
+field.value = "";
+field.focus();//把焦点设置到当前字段
+field.blur();//把焦点从字段上移走
+
+某些情况下防止重复提交表单，禁用 field.disabled = true;
+表单最好用submit事件来处理禁用，因为一些浏览器submit事件之前可能发生click
+----------------------------
+表单字段事件：
+blur：
+change：
+focus：
